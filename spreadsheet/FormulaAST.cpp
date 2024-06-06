@@ -144,19 +144,21 @@ namespace ASTImpl {
 
             double Evaluate(const std::function<double(Position)>& get_cell_pos_func) const override {
                 double result = 0.0;
+                double lhs_value = lhs_->Evaluate(get_cell_pos_func);
+                double rhs_value = rhs_->Evaluate(get_cell_pos_func);
 
                 switch (type_) {
                 case Type::Add:
-                    result = lhs_->Evaluate(get_cell_pos_func) + rhs_->Evaluate(get_cell_pos_func);
+                    result = lhs_value + rhs_value;
                     break;
                 case Type::Subtract:
-                    result = lhs_->Evaluate(get_cell_pos_func) - rhs_->Evaluate(get_cell_pos_func);
+                    result = lhs_value - rhs_value;
                     break;
                 case Type::Multiply:
-                    result = lhs_->Evaluate(get_cell_pos_func) * rhs_->Evaluate(get_cell_pos_func);
+                    result = lhs_value * rhs_value;
                     break;
                 case Type::Divide:
-                    result = lhs_->Evaluate(get_cell_pos_func) / rhs_->Evaluate(get_cell_pos_func);
+                    result = lhs_value / rhs_value;
                     break;
                 default:
                     break;
@@ -204,11 +206,11 @@ namespace ASTImpl {
             }
 
             double Evaluate(const std::function<double(Position)>& get_cell_pos_func) const override {
+                double value = operand_->Evaluate(get_cell_pos_func);
                 if (type_ == Type::UnaryMinus) {
-                    return -(operand_->Evaluate(get_cell_pos_func));
-                } else {
-                    return +(operand_->Evaluate(get_cell_pos_func));
+                    return -value;
                 }
+                return value;
             }
 
         private:
